@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema({
     group_id: mongoose.ObjectId,
-    company_id: mongoose.ObjectId,
+    company_id: [String],
     name: String,
     image: String,
     email: String,
@@ -10,7 +10,8 @@ const contactSchema = new mongoose.Schema({
     status: String,
     job: String,
     phone: String,
-    created: { type: Date, default: Date.now }
+    created: { type: Date, default: Date.now },
+    connections: [String]
 });
 
 module.exports = mongoose.model("contact", contactSchema);

@@ -25,15 +25,15 @@ exports.index = async (req, res) => {
 exports.store = async (req, res) => {
     try {
         let { group_id } = req.params
-        let { name, image, company_id, email, location, status, job, phone } = req.body
+        let { name, image, email, location, status, job, phone } = req.body
 
         let errors = []
-        let fields = ["name", "image", "company_id", "email", "location", "status", "job", "phone"]
-        fields.forEach(field_name => {
-            if (!req.body[field_name]?.trim()) {
-                errors.push(`The ${field_name.replace(/\_/g, ' ')} field is required.`)
-            }
-        })
+        // let fields = ["name", "image", "email", "location", "status", "job", "phone"]
+        // fields.forEach(field_name => {
+        //     if (!req.body[field_name]?.trim()) {
+        //         errors.push(`The ${field_name.replace(/\_/g, ' ')} field is required.`)
+        //     }
+        // })
         if (errors.length) {
             return res.status(STATUS_CODES.UNPROCESSABLE_CONTENT).json({
                 status: false,
@@ -42,19 +42,9 @@ exports.store = async (req, res) => {
             })
         }
 
-        image = base64Img.imgSync(image, 'uploads/contacts', moment.now())
+        req.body.image = base64Img.imgSync(req.body.image, 'uploads/contacts', moment.now())
 
-        let contact = await Contact.create({
-            group_id,
-            company_id,
-            name,
-            image,
-            email,
-            location,
-            status,
-            job,
-            phone
-        })
+        let contact = await Contact.create(req.body)
 
         return res.status(STATUS_CODES.OK).json({
             status: true,

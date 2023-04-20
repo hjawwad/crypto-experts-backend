@@ -5,7 +5,8 @@ const moment = require('moment')
 
 exports.index = async (req, res) => {
     try {
-        let companies = await Company.find({})
+        let { id } = req.params
+        let companies = await Company.find({ "_id": id })
 
         return res.status(STATUS_CODES.OK).json({
             status: true,

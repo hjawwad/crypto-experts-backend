@@ -2,15 +2,24 @@ const Group = require("../models/group.model");
 const STATUS_CODES = require('../helpers/status_codes.helper')
 const base64Img = require('base64-img')
 const moment = require('moment')
+const Contact = require("../models/contact.model");
 
 exports.index = async (req, res) => {
     try {
         let groups = await Group.find({"user_id": req.user.user_id})
+        let newArr = await Promise.all(groups.map(async (element) => {
+            let contact = 0;
+            contact = await Contact.find({ "group_id": element._id })
+            return {
+                data: element,
+                count: contact.length
+            }
+          }));
 
         return res.status(STATUS_CODES.OK).json({
             status: true,
             message: "Groups list successfully.",
-            data: groups
+            data: newArr
         });
     } catch (error) {
         return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({

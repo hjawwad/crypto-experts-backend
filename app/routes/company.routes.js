@@ -10,7 +10,7 @@ module.exports = function (app) {
         next();
     });
 
-    app.get("/api/companies", auth, controller.index);
+    app.get("/api/companies/:id", auth, controller.index);
     app.post("/api/companies", auth, controller.store);
     app.put("/api/companies/:id", auth, controller.update);
     app.delete("/api/companies/:id", auth, controller.destroy);
