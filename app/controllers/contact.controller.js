@@ -46,11 +46,16 @@ exports.store = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         let { id } = req.params
-        const filter = { _id: id };
-        const update = { $set: req.body };
-
+        const updateData = {};
+        req.body.forEach((item) => {
+          updateData[item.name] = item.value;
+        });
         // Use the updateOne() method to update the document
-        const contact = await Contact.updateOne(filter, update);
+        const contact = await Contact.findOneAndUpdate(
+            { _id: id },
+            { $push: { newField: updateData} },
+            { new: true }
+          );
 
         return res.status(STATUS_CODES.OK).json({
             status: true,

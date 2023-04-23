@@ -11,7 +11,8 @@ const contactSchema = new mongoose.Schema({
     job: String,
     phone: String,
     created: { type: Date, default: Date.now },
-    connections: [String]
+    connections: [String],
+    newField:Array,
 });
 
 module.exports = mongoose.model("contact", contactSchema);
