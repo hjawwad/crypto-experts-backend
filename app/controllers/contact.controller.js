@@ -24,23 +24,6 @@ exports.index = async (req, res) => {
 
 exports.store = async (req, res) => {
     try {
-        let { group_id } = req.params
-        let { name, image, email, location, status, job, phone } = req.body
-
-        let errors = []
-        // let fields = ["name", "image", "email", "location", "status", "job", "phone"]
-        // fields.forEach(field_name => {
-        //     if (!req.body[field_name]?.trim()) {
-        //         errors.push(`The ${field_name.replace(/\_/g, ' ')} field is required.`)
-        //     }
-        // })
-        if (errors.length) {
-            return res.status(STATUS_CODES.UNPROCESSABLE_CONTENT).json({
-                status: false,
-                message: "Invalid data.",
-                errors
-            })
-        }
 
         req.body.image = base64Img.imgSync(req.body.image, 'uploads/contacts', moment.now())
 
@@ -62,44 +45,12 @@ exports.store = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        let { group_id, id } = req.params
+        let { id } = req.params
+        const filter = { _id: id };
+        const update = { $set: req.body };
 
-        let { name, image, company_id, email, location, status, job, phone } = req.body
-
-        if (!await Contact.exists({ "_id": id, "group_id": group_id })) {
-            return res.status(STATUS_CODES.NOT_FOUND).json({
-                status: false,
-                message: "Contact not found."
-            })
-        }
-
-        let data = {}
-        if (name) {
-            data.name = name
-        }
-        if (image) {
-            data.image = base64Img.imgSync(image, 'uploads/contacts', moment.now())
-        }
-        if (company_id) {
-            data.company_id = company_id
-        }
-        if (email) {
-            data.email = email
-        }
-        if (location) {
-            data.location = location
-        }
-        if (status) {
-            data.status = status
-        }
-        if (job) {
-            data.job = job
-        }
-        if (phone) {
-            data.phone = phone
-        }
-
-        let contact = await Contact.findByIdAndUpdate(id, data, { new: true })
+        // Use the updateOne() method to update the document
+        const contact = await Contact.updateOne(filter, update);
 
         return res.status(STATUS_CODES.OK).json({
             status: true,
