@@ -5,7 +5,15 @@ const express = require("express");
 
 const app = express();
 
-app.use(cors({ origin: "*" }));
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "https://crypto-experts-backend.herokuapp.com/",
+  ],
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
