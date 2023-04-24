@@ -9,10 +9,12 @@ const corsOptions = {
   origin: [
     "http://localhost:3000",
     "https://crypto-experts-backend.herokuapp.com/",
+    "https://crypto-experts-frontend.herokuapp.com",
   ],
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-access-token"],
 };
+
 app.use(cors(corsOptions));
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
