@@ -27,12 +27,10 @@ exports.store = async (req, res) => {
     let { name, icon } = req.body;
 
     let errors = [];
-    if (!name?.trim()) {
-      errors.push(`The name field is required.`);
+    if (!name?.trim() && !icon?.trim()) {
+      errors.push(`The name or icon field is required.`);
     }
-    if (!icon?.trim()) {
-      errors.push(`The icon field is required.`);
-    }
+
     if (errors.length) {
       return res.status(STATUS_CODES.UNPROCESSABLE_CONTENT).json({
         status: false,

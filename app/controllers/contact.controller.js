@@ -25,8 +25,6 @@ exports.index = async (req, res) => {
 exports.store = async (req, res) => {
   try {
     if (req.body.image) {
-      console.log("Fucking here");
-
       req.body.image = base64Img.imgSync(
         req.body.image,
         "uploads/contacts",
