@@ -22,6 +22,25 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.show = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let contact = await Contact.find({ _id: id });
+
+    return res.status(STATUS_CODES.OK).json({
+      status: true,
+      message: "Contact show successfully.",
+      data: contact,
+    });
+  } catch (error) {
+    return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      message: error.message,
+      errors: [],
+    });
+  }
+};
+
 exports.store = async (req, res) => {
   try {
     if (req.body.image) {
@@ -52,15 +71,14 @@ exports.update = async (req, res) => {
   try {
     let { id } = req.params;
     const updateData = {};
-    req.body.forEach((item) => {
-      updateData[item.name] = item.value;
+    const obj = req.body;
+    for (const key in obj) {
+      updateData[key] = obj[key];
+    }
+
+    const contact = await Contact.findOneAndUpdate({ _id: id }, updateData, {
+      new: true,
     });
-    // Use the updateOne() method to update the document
-    const contact = await Contact.findOneAndUpdate(
-      { _id: id },
-      { $push: { newField: updateData } },
-      { new: true }
-    );
 
     return res.status(STATUS_CODES.OK).json({
       status: true,
@@ -71,6 +89,7 @@ exports.update = async (req, res) => {
     return res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({
       status: false,
       message: error.message,
+      body: req.body,
       errors: [],
     });
   }

@@ -6,10 +6,10 @@ module.exports = function (app) {
     res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
     next();
   });
-  console.log("Fucking here");
 
   app.get("/api/groups/:group_id/contacts", auth, controller.index);
   app.post("/api/groups/:group_id/contacts", auth, controller.store);
   app.put("/api/groups/:group_id/contacts/:id", auth, controller.update);
+  app.get("/api/groups/:group_id/contacts/:id", auth, controller.show);
   app.delete("/api/groups/:group_id/contacts/:id", auth, controller.destroy);
 };
